@@ -10,6 +10,7 @@ import {
   LayersIcon,
   LibraryIcon,
   FilmIcon,
+  ClapperboardIcon,
   WandSparklesIcon,
   MicIcon,
   UsersRoundIcon,
@@ -33,6 +34,7 @@ type Destination = readonly [
     | '/batch'
     | '/gallery'
     | '/dub'
+    | '/narration'
     | '/design'
     | '/transcriptions'
     | '/personas'
@@ -57,6 +59,7 @@ const storyDestinations: Destination[] = [
 ];
 const dubDestinations: Destination[] = [
   ['/dub', 'dubWorkspace.title', FilmIcon],
+  ['/narration', 'narration.title', ClapperboardIcon],
   ['/batch', 'nav.batch_dub', LayersIcon],
 ];
 const laterDestinations: Destination[] = [
@@ -80,6 +83,7 @@ const iconMotion: Record<Destination[0], string> = {
   '/stories': 'wave',
   '/audiobook': 'tilt',
   '/dub': 'tilt',
+  '/narration': 'tilt',
   '/batch': 'lift',
   '/transcriptions': 'nudge',
   '/calls': 'pulse',
