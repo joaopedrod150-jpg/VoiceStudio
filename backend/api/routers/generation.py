@@ -1129,7 +1129,7 @@ def _generate_timeout_s(
     )
 
 
-def _run_inference(
+def _run_inference_single(
     model, text, language, ref_audio_path, ref_text, instruct, duration,
     num_step, guidance_scale, speed, t_shift, denoise,
     postprocess_output, layer_penalty_factor, position_temperature,
@@ -1212,7 +1212,52 @@ def _run_inference(
         _oom_friendly_reraise(e)
 
 
-def _run_backend_inference(
+def _render_lang_runs(single, bound, sample_rate, finish):
+    """Render ``[lang:xx]..[/lang]`` text run by run, then join the audio.
+
+    ``single`` is the one-language renderer; each run is rendered raw (no
+    mastering) with its own language and the joined audio gets the effect
+    chain once, so levels stay even across the language switches.
+    """
+    import torch
+    from services.chunked_tts import DEFAULT_CROSSFADE_MS, concatenate_audio_chunks
+    from services.lang_spans import split_lang_runs
+
+    runs = split_lang_runs(bound["text"], bound["language"])
+    parts = []
+    for i, (run_text, run_lang) in enumerate(runs):
+        args = dict(bound, text=run_text, language=run_lang, effect_preset="raw")
+        if args.get("used_seed") is not None:
+            args["used_seed"] = args["used_seed"] + i
+        out = single(**args)
+        parts.append(out)
+    sr = sample_rate(bound)
+    joined = concatenate_audio_chunks(parts, sr, DEFAULT_CROSSFADE_MS, texts=[t for t, _ in runs])
+    return finish(joined, sr, bound)
+
+
+def _with_lang_runs(single, sample_rate, finish):
+    """Wrap a ``_run_*`` renderer so text carrying language tags is split by language."""
+    import functools
+    import inspect
+
+    sig = inspect.signature(single)
+
+    @functools.wraps(single)
+    def wrapper(*args, **kwargs):
+        from services.lang_spans import has_lang_tags
+
+        bound_args = sig.bind(*args, **kwargs)
+        bound_args.apply_defaults()
+        bound = dict(bound_args.arguments)
+        if not has_lang_tags(bound.get("text") or ""):
+            return single(*args, **kwargs)
+        return _render_lang_runs(single, bound, sample_rate, finish)
+
+    return wrapper
+
+
+def _run_backend_inference_single(
     backend, text, language, ref_audio_path, ref_text, instruct, duration,
     num_step, guidance_scale, speed, denoise, postprocess_output,
     used_seed, effect_preset="broadcast",
@@ -1318,6 +1363,21 @@ def _run_backend_inference(
         if rewritten is not e:
             raise rewritten from e
         _oom_friendly_reraise(e)
+
+
+_run_inference = _with_lang_runs(
+    _run_inference_single,
+    lambda b: b["model"].sampling_rate if hasattr(b["model"], "sampling_rate") else 24000,
+    lambda audio, sr, b: _apply_effect_chain(audio, sr, b["effect_preset"]),
+)
+_run_backend_inference = _with_lang_runs(
+    _run_backend_inference_single,
+    lambda b: b["backend"].sample_rate,
+    lambda audio, sr, b: _apply_effect_chain(
+        audio, sr, b["effect_preset"],
+        skip_mastering=getattr(b["backend"], "applies_own_mastering", False),
+    ),
+)
 
 
 # #1257: the language picker offers all 646 languages regardless of engine,
@@ -2025,6 +2085,20 @@ async def generate_speech(
     if isinstance(language, str) and language.strip().lower() == "auto":
         language = None
 
+    # With "Auto" the text itself still has a language: the numbers normaliser
+    # and per-language pronunciation entries need it, and engines that accept
+    # any language (OmniVoice) pronounce far better when told (pt-BR "R"
+    # words, English loan words). Engines with a fixed language list keep
+    # getting None (#2156). The detector declines when unsure.
+    text_language = language
+    if language is None and lang_autodetect_enabled():
+        from services.lang_spans import detect_language, strip_lang_tags
+        _detected = detect_language(strip_lang_tags(text))
+        if _detected:
+            text_language = _detected
+            if _backend is None or getattr(_backend, "supports_native_omnivoice_controls", False):
+                language = _detected
+
     # Engine-agnostic text normalization (junk strip, numbers→words,
     # abbreviations) — AFTER `language` is fully resolved, and BEFORE the
     # pronunciation dictionary so user dictionary entries operate on
@@ -2032,7 +2106,7 @@ async def generate_speech(
     # in services/text_normalization.py). Pref-gated (default ON), idempotent,
     # never raises; applied exactly once per request, at this choke point.
     from services.text_normalization import normalize_for_tts
-    text = normalize_for_tts(text, language)
+    text = normalize_for_tts(text, text_language)
 
     # Expressive-TTS Spec 01: apply the user pronunciation dictionary + inline
     # [[…]] one-off overrides to the text, here — AFTER `language` is fully
@@ -2049,7 +2123,7 @@ async def generate_speech(
             _pron_rows = load_entries_from_db()
         except Exception:  # noqa: BLE001 — table missing / DB locked → no-op
             _pron_rows = []
-        text = apply_pronunciation(text, _pron_rows, language)
+        text = apply_pronunciation(text, _pron_rows, text_language)
     else:
         # Even with the dictionary off, inline [[…]] overrides are an explicit,
         # in-text authoring choice → always honored (and never left as literal
@@ -2078,6 +2152,10 @@ async def generate_speech(
     if stream:
         from omnivoice.utils.text import parse_pause_markers
         from services.chunked_tts import split_text_into_chunks
+        from services.lang_spans import strip_lang_tags
+
+        # Streaming renders one language per request; keep the words, drop the tags.
+        text = strip_lang_tags(text)
 
         _segments = parse_pause_markers(text)
         _has_pause = len(_segments) > 1 or (_segments and _segments[0][1] > 0)
@@ -2628,6 +2706,14 @@ def _remove_wav_if_unreferenced(conn, audio_path, exclude_ids=(), defer=None):
 # WAVs). User-tunable via Settings → Storage; 0 = unlimited. The pref key is
 # shared with api/routers/settings.py (the GET/PUT endpoint) — same pattern as
 # perf.torch_compile_disabled, which settings.py and engine_env.py both name.
+def lang_autodetect_enabled() -> bool:
+    """Language auto-detection for "Auto" is on unless OMNIVOICE_LANG_AUTODETECT
+    is "0"/"false"/"no"/"off" (same contract as OMNIVOICE_PRONUNCIATION)."""
+    return os.environ.get("OMNIVOICE_LANG_AUTODETECT", "1").strip().lower() not in (
+        "0", "false", "no", "off",
+    )
+
+
 def pronunciation_enabled() -> bool:
     """The pronunciation dictionary is on unless OMNIVOICE_PRONUNCIATION is
     "0"/"false"/"no"/"off". Env only: a prefs key was once read here too, but
