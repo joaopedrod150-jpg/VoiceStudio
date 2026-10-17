@@ -10,10 +10,9 @@ vi.mock('@tanstack/react-router', () => ({
   useRouterState: ({ select }: any) => select({ location: route }),
   Outlet: () => <div data-testid="outlet" />,
 }));
-vi.mock('./workspace-sidebar', () => ({
-  WorkspaceSidebar: () => <aside data-testid="main-sidebar" />,
+vi.mock('./app-sidebar', () => ({
+  AppSidebar: () => <aside data-testid="main-sidebar" />,
 }));
-vi.mock('./sponsor-footer', () => ({ SponsorFooter: () => null }));
 vi.mock('./repair-agent-dock', () => ({ RepairAgentDock: () => null }));
 vi.mock('./system-notifications', () => ({ SystemNotifications: () => null }));
 vi.mock('@/components/command-palette', () => ({ CommandPalette: () => null }));

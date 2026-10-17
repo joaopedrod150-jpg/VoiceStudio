@@ -56,6 +56,9 @@ export const rootRoute = createRootRoute({ component: AppShell });
 export const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
+  beforeLoad: () => {
+    throw redirect({ to: '/clone' });
+  },
   component: HomePage,
 });
 

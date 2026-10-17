@@ -3503,5 +3503,15 @@
     "err_time": "Segmen {{n}} memiliki waktu yang tidak valid.",
     "err_short": "Segmen {{n}} harus berdurasi minimal 0,3 dtk.",
     "err_overlap": "Segmen {{n}} tumpang tindih dengan segmen berikutnya."
+  },
+  "appNav": {
+    "clone": "Kloning",
+    "design": "Desain",
+    "dub": "Dubbing",
+    "narration": "Narasi",
+    "transcribe": "Transkrip",
+    "audiobook": "Buku audio",
+    "models": "Model",
+    "settings": "Pengaturan"
   }
 }

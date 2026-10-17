@@ -48,23 +48,23 @@ interface ExportRecord {
 
 const iconTones: Record<string, string> = {
   '/clone':
-    'bg-sky-100 text-sky-700 ring-sky-300/60 dark:bg-sky-400/15 dark:text-sky-300 dark:ring-sky-300/30',
+    'bg-accent text-foreground ring-border',
   '/design':
-    'bg-violet-100 text-violet-700 ring-violet-300/60 dark:bg-violet-400/15 dark:text-violet-300 dark:ring-violet-300/30',
+    'bg-accent text-foreground ring-border',
   '/dub':
-    'bg-teal-100 text-teal-700 ring-teal-300/60 dark:bg-teal-400/15 dark:text-teal-300 dark:ring-teal-300/30',
+    'bg-accent text-foreground ring-border',
   '/stories':
-    'bg-rose-100 text-rose-700 ring-rose-300/60 dark:bg-rose-400/15 dark:text-rose-300 dark:ring-rose-300/30',
+    'bg-accent text-foreground ring-border',
   '/audiobook':
-    'bg-amber-100 text-amber-800 ring-amber-300/60 dark:bg-amber-400/15 dark:text-amber-200 dark:ring-amber-300/30',
+    'bg-accent text-foreground ring-border',
   '/gallery':
-    'bg-fuchsia-100 text-fuchsia-700 ring-fuchsia-300/60 dark:bg-fuchsia-400/15 dark:text-fuchsia-300 dark:ring-fuchsia-300/30',
+    'bg-accent text-foreground ring-border',
   '/transcriptions':
-    'bg-cyan-100 text-cyan-700 ring-cyan-300/60 dark:bg-cyan-400/15 dark:text-cyan-200 dark:ring-cyan-300/30',
+    'bg-accent text-foreground ring-border',
   '/calls':
-    'bg-indigo-100 text-indigo-700 ring-indigo-300/60 dark:bg-indigo-400/15 dark:text-indigo-300 dark:ring-indigo-300/30',
+    'bg-accent text-foreground ring-border',
   '/tools':
-    'bg-slate-100 text-slate-700 ring-slate-300/60 dark:bg-slate-300/15 dark:text-slate-200 dark:ring-slate-300/30',
+    'bg-accent text-foreground ring-border',
 };
 
 export function HomePage() {

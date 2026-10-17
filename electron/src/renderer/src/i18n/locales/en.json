@@ -3503,5 +3503,15 @@
     "err_time": "Segment {{n}} has an invalid time.",
     "err_short": "Segment {{n}} must last at least 0.3 s.",
     "err_overlap": "Segment {{n}} overlaps the next one."
+  },
+  "appNav": {
+    "clone": "Cloning",
+    "design": "Design",
+    "dub": "Dubbing",
+    "narration": "Narration",
+    "transcribe": "Transcribe",
+    "audiobook": "Audiobook",
+    "models": "Models",
+    "settings": "Settings"
   }
 }

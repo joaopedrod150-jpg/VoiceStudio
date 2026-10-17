@@ -633,9 +633,9 @@
   }
 }
 
-/* Classic glass uses violet reflections instead of the status-warning gold. */
+/* Classic glass reflects the accent colour instead of the status-warning gold. */
 html[data-theme-id='heritage'] {
-  --glass-light-color: #ad82d9;
+  --glass-light-color: var(--primary);
 }
 
 /* Keep controls opaque: Glass mode clears the bg-background surface utility. */

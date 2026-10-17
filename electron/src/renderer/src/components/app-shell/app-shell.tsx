@@ -1,5 +1,4 @@
-import { SponsorFooter } from './sponsor-footer';
-import { WorkspaceSidebar } from './workspace-sidebar';
+import { AppSidebar } from './app-sidebar';
 import { CommandPalette } from '@/components/command-palette';
 import { Outlet, useRouterState } from '@tanstack/react-router';
 import { BackendGate } from '../backend-gate';
@@ -31,7 +30,7 @@ export function AppShell() {
             <CommandPalette />
             {/* The main sidebar (navigation, library, status) stays where it is
                 on Settings too, so the app never swaps its left column. */}
-            <WorkspaceSidebar />
+            <AppSidebar />
             <SettingsWorkspace
               data-slot="workspace-content"
               role={pathname === '/settings/openapi' ? 'main' : undefined}
@@ -46,7 +45,7 @@ export function AppShell() {
         ) : (
           <BackendGate repairDock={<RepairAgentDock />}>
             <CommandPalette />
-            <WorkspaceSidebar />
+            <AppSidebar />
             <main
               data-slot="workspace-content"
               className="@container relative flex min-w-0 flex-1 flex-col overflow-hidden"
@@ -54,7 +53,6 @@ export function AppShell() {
               <div className="min-h-0 flex-1 overflow-hidden">
                 <Outlet />
               </div>
-              <SponsorFooter />
               <RepairAgentDock />
             </main>
           </BackendGate>

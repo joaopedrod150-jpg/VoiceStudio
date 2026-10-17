@@ -3503,5 +3503,15 @@
     "err_time": "Segment {{n}} heeft een ongeldige tijd.",
     "err_short": "Segment {{n}} moet minstens 0,3 s duren.",
     "err_overlap": "Segment {{n}} overlapt met het volgende."
+  },
+  "appNav": {
+    "clone": "Klonen",
+    "design": "Ontwerp",
+    "dub": "Nasynchron",
+    "narration": "Narratie",
+    "transcribe": "Transcriptie",
+    "audiobook": "Luisterboek",
+    "models": "Modellen",
+    "settings": "Instellingen"
   }
 }

@@ -3503,5 +3503,15 @@
     "err_time": "Abschnitt {{n}} hat eine ungültige Zeit.",
     "err_short": "Abschnitt {{n}} muss mindestens 0,3 s dauern.",
     "err_overlap": "Abschnitt {{n}} überschneidet sich mit dem nächsten."
+  },
+  "appNav": {
+    "clone": "Klonen",
+    "design": "Design",
+    "dub": "Synchron",
+    "narration": "Vertonung",
+    "transcribe": "Transkript",
+    "audiobook": "Hörbuch",
+    "models": "Modelle",
+    "settings": "Einstellungen"
   }
 }

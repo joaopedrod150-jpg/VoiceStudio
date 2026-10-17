@@ -3503,5 +3503,15 @@
     "err_time": "Segment {{n}} har en ogiltig tid.",
     "err_short": "Segment {{n}} måste vara minst 0,3 s.",
     "err_overlap": "Segment {{n}} överlappar nästa."
+  },
+  "appNav": {
+    "clone": "Kloning",
+    "design": "Design",
+    "dub": "Dubbning",
+    "narration": "Berättare",
+    "transcribe": "Transkribera",
+    "audiobook": "Ljudbok",
+    "models": "Modeller",
+    "settings": "Inställningar"
   }
 }

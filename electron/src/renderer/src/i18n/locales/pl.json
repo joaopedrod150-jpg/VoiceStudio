@@ -3507,5 +3507,15 @@
     "err_time": "Fragment {{n}} ma nieprawidłowy czas.",
     "err_short": "Fragment {{n}} musi trwać co najmniej 0,3 s.",
     "err_overlap": "Fragment {{n}} nakłada się na następny."
+  },
+  "appNav": {
+    "clone": "Klonowanie",
+    "design": "Projekt",
+    "dub": "Dubbing",
+    "narration": "Narracja",
+    "transcribe": "Transkrypcja",
+    "audiobook": "Audiobook",
+    "models": "Modele",
+    "settings": "Ustawienia"
   }
 }

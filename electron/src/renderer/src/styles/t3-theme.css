@@ -2,6 +2,12 @@
  * See electron/T3CODE-LICENSE.txt. */
 :root {
   color-scheme: light;
+  /* Accent: change these three numbers to re-colour the whole app
+     (hue 0-360, chroma 0-0.2, lightness per theme). Everything else is neutral. */
+  --accent-hue: 215;
+  --accent-chroma: 0.05;
+  --accent-lightness: 0.38;
+  --accent-lightness-dark: 0.8;
   --radius: 0.625rem;
   --background: var(--color-zinc-25);
   --app-chrome-background: var(--background);
@@ -17,7 +23,7 @@
   --card-foreground: var(--color-zinc-800);
   --popover: var(--color-white);
   --popover-foreground: var(--color-zinc-800);
-  --primary: oklch(0.488 0.217 264);
+  --primary: oklch(var(--accent-lightness) var(--accent-chroma) var(--accent-hue));
   --primary-foreground: var(--color-white);
   --secondary: var(--color-zinc-50);
   --secondary-foreground: var(--color-zinc-800);
@@ -81,7 +87,8 @@
     --card-foreground: var(--color-neutral-100);
     --popover: color-mix(in srgb, var(--background) 97%, var(--color-white));
     --popover-foreground: var(--color-neutral-100);
-    --primary: oklch(0.571 0.21 264);
+    --primary: oklch(var(--accent-lightness-dark) var(--accent-chroma) var(--accent-hue));
+    --primary-foreground: var(--color-neutral-950);
     --secondary: --alpha(var(--color-white) / 3%);
     --secondary-foreground: var(--color-neutral-100);
     --muted: --alpha(var(--color-white) / 3%);

@@ -3505,5 +3505,15 @@
     "err_time": "El segmento {{n}} tiene un tiempo no válido.",
     "err_short": "El segmento {{n}} debe durar al menos 0,3 s.",
     "err_overlap": "El segmento {{n}} se solapa con el siguiente."
+  },
+  "appNav": {
+    "clone": "Clonación",
+    "design": "Diseño",
+    "dub": "Doblaje",
+    "narration": "Narración",
+    "transcribe": "Transcribir",
+    "audiobook": "Audiolibro",
+    "models": "Modelos",
+    "settings": "Ajustes"
   }
 }

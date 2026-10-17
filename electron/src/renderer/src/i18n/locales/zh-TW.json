@@ -3503,5 +3503,15 @@
     "err_time": "第 {{n}} 段的時間無效。",
     "err_short": "第 {{n}} 段至少需要 0.3 秒。",
     "err_overlap": "第 {{n}} 段與下一段重疊。"
+  },
+  "appNav": {
+    "clone": "複製",
+    "design": "設計",
+    "dub": "配音",
+    "narration": "旁白",
+    "transcribe": "轉寫",
+    "audiobook": "有聲書",
+    "models": "模型",
+    "settings": "設定"
   }
 }

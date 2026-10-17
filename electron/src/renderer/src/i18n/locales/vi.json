@@ -3503,5 +3503,15 @@
     "err_time": "Đoạn {{n}} có thời gian không hợp lệ.",
     "err_short": "Đoạn {{n}} phải dài ít nhất 0,3 giây.",
     "err_overlap": "Đoạn {{n}} chồng lên đoạn kế tiếp."
+  },
+  "appNav": {
+    "clone": "Nhân bản",
+    "design": "Thiết kế",
+    "dub": "Lồng tiếng",
+    "narration": "Thuyết minh",
+    "transcribe": "Phiên âm",
+    "audiobook": "Sách nói",
+    "models": "Mô hình",
+    "settings": "Cài đặt"
   }
 }

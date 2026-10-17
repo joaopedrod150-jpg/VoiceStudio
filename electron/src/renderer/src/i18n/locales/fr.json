@@ -3505,5 +3505,15 @@
     "err_time": "Le segment {{n}} a un temps invalide.",
     "err_short": "Le segment {{n}} doit durer au moins 0,3 s.",
     "err_overlap": "Le segment {{n}} chevauche le suivant."
+  },
+  "appNav": {
+    "clone": "Clonage",
+    "design": "Création",
+    "dub": "Doublage",
+    "narration": "Narration",
+    "transcribe": "Transcrire",
+    "audiobook": "Audiolivre",
+    "models": "Modèles",
+    "settings": "Réglages"
   }
 }

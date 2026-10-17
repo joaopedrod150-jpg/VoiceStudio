@@ -3505,5 +3505,15 @@
     "err_time": "O trecho {{n}} tem um tempo inválido.",
     "err_short": "O trecho {{n}} deve durar pelo menos 0,3 s.",
     "err_overlap": "O trecho {{n}} se sobrepõe ao próximo."
+  },
+  "appNav": {
+    "clone": "Clonagem",
+    "design": "Design",
+    "dub": "Dublagem",
+    "narration": "Narração",
+    "transcribe": "Transcrição",
+    "audiobook": "Audiobook",
+    "models": "Modelos",
+    "settings": "Ajustes"
   }
 }

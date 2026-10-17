@@ -3503,5 +3503,15 @@
     "err_time": "구간 {{n}}의 시간이 올바르지 않습니다.",
     "err_short": "구간 {{n}}은 최소 0.3초여야 합니다.",
     "err_overlap": "구간 {{n}}이 다음 구간과 겹칩니다."
+  },
+  "appNav": {
+    "clone": "클로닝",
+    "design": "디자인",
+    "dub": "더빙",
+    "narration": "내레이션",
+    "transcribe": "받아쓰기",
+    "audiobook": "오디오북",
+    "models": "모델",
+    "settings": "설정"
   }
 }
