@@ -50,6 +50,7 @@ vi.mock('./profile-usage', () => ({ ProfileUsagePanel: () => null }));
 vi.mock('./language-picker', () => ({ LanguagePicker: () => null }));
 vi.mock('./persona-export', () => ({ PersonaExport: () => null }));
 vi.mock('./profile-image-editor', () => ({ ProfileImageEditor: () => null }));
+vi.mock('./reference-list', () => ({ SavedRecordings: () => null }));
 import { EditProfile } from './edit-profile';
 
 const base = {

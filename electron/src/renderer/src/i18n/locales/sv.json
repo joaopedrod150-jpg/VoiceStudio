@@ -3459,5 +3459,15 @@
     "gateIntro": "Godkänn licensen för varje modell nedan innan du använder den. Granska var och en och markera sedan dess ruta.",
     "retryHint": "Licenserna har godkänts. Om något väntade på dem, starta det igen.",
     "detailsFailed": "Licensinformationen kunde inte läsas in. Stäng dialogrutan och försök igen."
+  },
+  "multiRef": {
+    "title": "Fler inspelningar av den här rösten",
+    "hint": "Flera klipp av samma person ger en mer trogen klon. De rensas och slås ihop automatiskt (cirka {{max}} s används).",
+    "add": "Lägg till inspelningar",
+    "remove": "Ta bort {{name}}",
+    "total": "Totalt: {{seconds}} s i {{count}} inspelningar",
+    "skipped": "Hoppades över: {{reason}}",
+    "processing": "Rensar och slår ihop inspelningar…",
+    "error": "Det gick inte att uppdatera inspelningarna: {{message}}"
   }
 }

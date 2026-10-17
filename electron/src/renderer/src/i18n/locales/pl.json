@@ -3463,5 +3463,15 @@
     "gateIntro": "Zaakceptuj licencję każdego z poniższych modeli, zanim go użyjesz. Przejrzyj każdą z nich, a następnie zaznacz jej pole.",
     "retryHint": "Licencje zaakceptowane. Jeśli coś na nie czekało, uruchom to ponownie.",
     "detailsFailed": "Nie udało się wczytać szczegółów licencji. Zamknij to okno i spróbuj ponownie."
+  },
+  "multiRef": {
+    "title": "Więcej nagrań tego głosu",
+    "hint": "Kilka nagrań tej samej osoby daje wierniejszy klon. Są automatycznie oczyszczane i łączone (używane jest około {{max}} s).",
+    "add": "Dodaj nagrania",
+    "remove": "Usuń {{name}}",
+    "total": "Razem: {{seconds}} s w {{count}} nagraniach",
+    "skipped": "Pominięto: {{reason}}",
+    "processing": "Czyszczenie i łączenie nagrań…",
+    "error": "Nie udało się zaktualizować nagrań: {{message}}"
   }
 }

@@ -3459,5 +3459,15 @@
     "gateIntro": "Accept the licence of each model below before using it. Review each one, then tick its box.",
     "retryHint": "Licences accepted. If something was waiting for them, start it again.",
     "detailsFailed": "The licence details could not be loaded. Close this dialog and try again."
+  },
+  "multiRef": {
+    "title": "More recordings of this voice",
+    "hint": "Several clips of the same person give a more faithful clone. They are cleaned and merged automatically (about {{max}} s are used).",
+    "add": "Add recordings",
+    "remove": "Remove {{name}}",
+    "total": "Total: {{seconds}} s in {{count}} recordings",
+    "skipped": "Skipped: {{reason}}",
+    "processing": "Cleaning and merging recordings…",
+    "error": "Could not update the recordings: {{message}}"
   }
 }

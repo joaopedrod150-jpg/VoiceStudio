@@ -3459,5 +3459,15 @@
     "gateIntro": "Akzeptiere die Lizenz jedes unten aufgeführten Modells, bevor du es verwendest. Prüfe jede einzelne und setze dann das jeweilige Häkchen.",
     "retryHint": "Lizenzen akzeptiert. Falls etwas darauf gewartet hat, starte es erneut.",
     "detailsFailed": "Die Lizenzdetails konnten nicht geladen werden. Schließe diesen Dialog und versuche es erneut."
+  },
+  "multiRef": {
+    "title": "Weitere Aufnahmen dieser Stimme",
+    "hint": "Mehrere Clips derselben Person ergeben einen treueren Klon. Sie werden automatisch bereinigt und zusammengeführt (etwa {{max}} s werden genutzt).",
+    "add": "Aufnahmen hinzufügen",
+    "remove": "{{name}} entfernen",
+    "total": "Gesamt: {{seconds}} s in {{count}} Aufnahmen",
+    "skipped": "Übersprungen: {{reason}}",
+    "processing": "Aufnahmen werden bereinigt und zusammengeführt…",
+    "error": "Aufnahmen konnten nicht aktualisiert werden: {{message}}"
   }
 }

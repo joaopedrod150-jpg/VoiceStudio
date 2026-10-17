@@ -8,9 +8,26 @@ export interface CreateCloneProfileInput {
   image?: File;
   refAudio: File | Blob;
   refAudioName?: string;
+  /** More recordings of the same person; the backend merges them all. */
+  extraRefAudios?: File[];
   refText?: string;
   instruct?: string;
   language?: string;
+}
+
+export interface ProfileReference {
+  id: string;
+  original_name: string;
+  duration: number;
+  status: 'ok' | 'rejected';
+  reason: string;
+  position: number;
+}
+
+export interface ProfileReferences {
+  references: ProfileReference[];
+  /** Seconds of usable source audio across the recordings. */
+  source_seconds: number;
 }
 
 export async function listProfiles({ signal }: { signal?: AbortSignal } = {}): Promise<Profile[]> {
@@ -35,6 +52,7 @@ export async function createCloneProfile(input: CreateCloneProfileInput): Promis
     (input.refAudio instanceof File ? input.refAudio.name : '') ||
     'profile.wav';
   form.append('ref_audio', input.refAudio, fileName);
+  for (const extra of input.extraRefAudios ?? []) form.append('extra_ref_audios', extra, extra.name);
   form.append('ref_text', input.refText ?? '');
   // Same whitelist as /generate: a saved profile must never carry an instruct
   // the engine will reject on every later synthesis.
@@ -84,4 +102,25 @@ export async function replaceProfileAudio(
 
 export async function deleteProfile(id: string): Promise<void> {
   await apiFetch(`/profiles/${encodeURIComponent(id)}`, { method: 'DELETE' });
+}
+
+export async function listProfileReferences(id: string): Promise<ProfileReferences> {
+  return apiJson<ProfileReferences>(`/profiles/${encodeURIComponent(id)}/references`);
+}
+
+/** Add recordings to a saved clone; the backend re-merges every source. */
+export async function addProfileReferences(id: string, files: File[]): Promise<Profile> {
+  const form = new FormData();
+  for (const file of files) form.append('ref_audios', file, file.name);
+  return apiJson<Profile>(`/profiles/${encodeURIComponent(id)}/references`, {
+    method: 'POST',
+    body: form,
+  });
+}
+
+export async function deleteProfileReference(id: string, refId: string): Promise<Profile> {
+  return apiJson<Profile>(
+    `/profiles/${encodeURIComponent(id)}/references/${encodeURIComponent(refId)}`,
+    { method: 'DELETE' },
+  );
 }

@@ -3459,5 +3459,15 @@
     "gateIntro": "Hãy chấp nhận giấy phép của từng mô hình bên dưới trước khi sử dụng. Hãy xem từng giấy phép rồi đánh dấu ô tương ứng.",
     "retryHint": "Đã chấp nhận giấy phép. Nếu có thao tác đang chờ, hãy chạy lại.",
     "detailsFailed": "Không thể tải chi tiết giấy phép. Hãy đóng hộp thoại này và thử lại."
+  },
+  "multiRef": {
+    "title": "Thêm bản ghi của giọng này",
+    "hint": "Nhiều đoạn ghi của cùng một người cho bản sao trung thực hơn. Chúng được làm sạch và ghép tự động (dùng khoảng {{max}} giây).",
+    "add": "Thêm bản ghi",
+    "remove": "Xóa {{name}}",
+    "total": "Tổng: {{seconds}} giây trong {{count}} bản ghi",
+    "skipped": "Đã bỏ qua: {{reason}}",
+    "processing": "Đang làm sạch và ghép các bản ghi…",
+    "error": "Không thể cập nhật các bản ghi: {{message}}"
   }
 }

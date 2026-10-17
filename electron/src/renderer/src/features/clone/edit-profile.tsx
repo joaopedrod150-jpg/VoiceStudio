@@ -29,6 +29,7 @@ import { cloneSettingsStore, patchCloneSettings } from '@/lib/store/clone-settin
 import { createObjectUrl, revokeObjectUrl } from '@/lib/audio/object-url';
 import { cn } from '@/lib/utils';
 import { ReferenceSourcePicker, ReferenceUsageNote } from './reference-input';
+import { SavedRecordings } from './reference-list';
 import { ProfileImageEditor } from './profile-image-editor';
 import { formatRelative } from './format';
 import { useTtsReadiness } from '@/hooks/use-tts-readiness';
@@ -237,6 +238,9 @@ export function EditProfile({ profile, onDone }: { profile: Profile; onDone: () 
             <p role="note" className="text-xs text-muted-foreground">
               {t('clone.replace_reference_hint')}
             </p>
+          )}
+          {canReplace && !replacement && !choosing && (
+            <SavedRecordings profileId={profile.id} disabled={unavailable} />
           )}
         </section>
       )}

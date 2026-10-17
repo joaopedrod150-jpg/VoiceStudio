@@ -3461,5 +3461,15 @@
     "gateIntro": "Acepta la licencia de cada modelo de abajo antes de usarlo. Revisa cada una y marca su casilla.",
     "retryHint": "Licencias aceptadas. Si algo estaba esperando, vuelve a iniciarlo.",
     "detailsFailed": "No se pudieron cargar los detalles de la licencia. Cierra este diálogo e inténtalo de nuevo."
+  },
+  "multiRef": {
+    "title": "Más grabaciones de esta voz",
+    "hint": "Varios clips de la misma persona dan un clon más fiel. Se limpian y combinan automáticamente (se usan unos {{max}} s).",
+    "add": "Añadir grabaciones",
+    "remove": "Quitar {{name}}",
+    "total": "Total: {{seconds}} s en {{count}} grabaciones",
+    "skipped": "Omitido: {{reason}}",
+    "processing": "Limpiando y combinando grabaciones…",
+    "error": "No se pudieron actualizar las grabaciones: {{message}}"
   }
 }

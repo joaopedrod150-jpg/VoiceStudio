@@ -3459,5 +3459,15 @@
     "gateIntro": "Terima lisensi setiap model di bawah sebelum menggunakannya. Tinjau masing-masing, lalu centang kotaknya.",
     "retryHint": "Lisensi diterima. Jika ada tindakan yang menunggunya, jalankan lagi.",
     "detailsFailed": "Detail lisensi tidak dapat dimuat. Tutup dialog ini dan coba lagi."
+  },
+  "multiRef": {
+    "title": "Rekaman lain dari suara ini",
+    "hint": "Beberapa klip dari orang yang sama menghasilkan klon yang lebih akurat. Klip dibersihkan dan digabung otomatis (sekitar {{max}} dtk dipakai).",
+    "add": "Tambah rekaman",
+    "remove": "Hapus {{name}}",
+    "total": "Total: {{seconds}} dtk dalam {{count}} rekaman",
+    "skipped": "Dilewati: {{reason}}",
+    "processing": "Membersihkan dan menggabungkan rekaman…",
+    "error": "Tidak dapat memperbarui rekaman: {{message}}"
   }
 }

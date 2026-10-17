@@ -30,6 +30,8 @@ import { selectCloneProfile, setReferenceFile, useReference } from '@/lib/store/
 import { setWorkspace } from '@/lib/store/workspace';
 import { cn } from '@/lib/utils';
 import { ReferenceSourcePicker, ReferenceUsageNote } from './reference-input';
+import { ExtraRecordings, type PendingRecording } from './reference-list';
+import { probeAudioDuration } from '@/lib/audio/probe';
 
 interface SaveProfileFormProps {
   metadata?: { refText: string; instruct: string; language: string; seed: number | null };
@@ -53,6 +55,15 @@ export function SaveProfileForm({
   const create = useCreateCloneProfile();
   const [image, setImage] = useState<File>();
   const [imageUrl, setImageUrl] = useState<string>();
+  const [extras, setExtras] = useState<PendingRecording[]>([]);
+  const [baseSeconds, setBaseSeconds] = useState<number | null>(null);
+  useEffect(() => {
+    let live = true;
+    void probeAudioDuration(file).then((seconds) => live && setBaseSeconds(seconds));
+    return () => {
+      live = false;
+    };
+  }, [file]);
   useEffect(() => {
     if (!image) {
       setImageUrl(undefined);
@@ -75,6 +86,7 @@ export function SaveProfileForm({
           image,
           refAudio: file,
           refAudioName: file.name,
+          extraRefAudios: extras.map((item) => item.file),
           refText: metadata?.refText ?? refText,
           instruct: metadata?.instruct ?? instruct,
           language: metadata?.language ?? language,
@@ -150,6 +162,7 @@ export function SaveProfileForm({
             );
           }}
         </form.Field>
+        <ExtraRecordings items={extras} onChange={setExtras} baseSeconds={baseSeconds} />
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
           <span>{t('cloneFlow.photo_hint')}</span>
           {image && (

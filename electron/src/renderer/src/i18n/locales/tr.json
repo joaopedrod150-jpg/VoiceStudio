@@ -3459,5 +3459,15 @@
     "gateIntro": "Kullanmadan önce aşağıdaki her modelin lisansını kabul edin. Her birini inceleyin, ardından kutusunu işaretleyin.",
     "retryHint": "Lisanslar kabul edildi. Bunu bekleyen bir işlem varsa yeniden başlatın.",
     "detailsFailed": "Lisans ayrıntıları yüklenemedi. Bu pencereyi kapatıp yeniden deneyin."
+  },
+  "multiRef": {
+    "title": "Bu sesin daha fazla kaydı",
+    "hint": "Aynı kişinin birden fazla kaydı daha sadık bir klon sağlar. Otomatik olarak temizlenir ve birleştirilir (yaklaşık {{max}} sn kullanılır).",
+    "add": "Kayıt ekle",
+    "remove": "{{name}} kaldır",
+    "total": "Toplam: {{count}} kayıtta {{seconds}} sn",
+    "skipped": "Atlandı: {{reason}}",
+    "processing": "Kayıtlar temizleniyor ve birleştiriliyor…",
+    "error": "Kayıtlar güncellenemedi: {{message}}"
   }
 }

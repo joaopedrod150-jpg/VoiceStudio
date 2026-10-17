@@ -3459,5 +3459,15 @@
     "gateIntro": "Accepteer de licentie van elk model hieronder voordat je het gebruikt. Bekijk ze een voor een en vink dan het bijbehorende vakje aan.",
     "retryHint": "Licenties geaccepteerd. Als iets hierop wachtte, start het dan opnieuw.",
     "detailsFailed": "De licentiegegevens konden niet worden geladen. Sluit dit venster en probeer het opnieuw."
+  },
+  "multiRef": {
+    "title": "Meer opnames van deze stem",
+    "hint": "Meerdere fragmenten van dezelfde persoon geven een getrouwere kloon. Ze worden automatisch opgeschoond en samengevoegd (ongeveer {{max}} s wordt gebruikt).",
+    "add": "Opnames toevoegen",
+    "remove": "{{name}} verwijderen",
+    "total": "Totaal: {{seconds}} s in {{count}} opnames",
+    "skipped": "Overgeslagen: {{reason}}",
+    "processing": "Opnames opschonen en samenvoegen…",
+    "error": "Kon de opnames niet bijwerken: {{message}}"
   }
 }

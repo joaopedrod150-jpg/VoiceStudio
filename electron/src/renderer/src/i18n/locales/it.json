@@ -3461,5 +3461,15 @@
     "gateIntro": "Accetta la licenza di ciascun modello qui sotto prima di usarlo. Esaminale una per una, quindi spunta la relativa casella.",
     "retryHint": "Licenze accettate. Se un'operazione era in attesa, avviala di nuovo.",
     "detailsFailed": "Impossibile caricare i dettagli della licenza. Chiudi questa finestra e riprova."
+  },
+  "multiRef": {
+    "title": "Altre registrazioni di questa voce",
+    "hint": "Più clip della stessa persona danno un clone più fedele. Vengono ripulite e unite automaticamente (si usano circa {{max}} s).",
+    "add": "Aggiungi registrazioni",
+    "remove": "Rimuovi {{name}}",
+    "total": "Totale: {{seconds}} s in {{count}} registrazioni",
+    "skipped": "Saltata: {{reason}}",
+    "processing": "Pulizia e unione delle registrazioni…",
+    "error": "Impossibile aggiornare le registrazioni: {{message}}"
   }
 }

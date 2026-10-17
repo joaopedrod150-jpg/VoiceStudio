@@ -3461,5 +3461,15 @@
     "gateIntro": "Acceptez la licence de chaque modèle ci-dessous avant de l'utiliser. Consultez-les une par une, puis cochez la case correspondante.",
     "retryHint": "Licences acceptées. Si une action attendait cette acceptation, relancez-la.",
     "detailsFailed": "Impossible de charger les détails de la licence. Fermez cette boîte de dialogue et réessayez."
+  },
+  "multiRef": {
+    "title": "Plus d'enregistrements de cette voix",
+    "hint": "Plusieurs extraits de la même personne donnent un clone plus fidèle. Ils sont nettoyés et fusionnés automatiquement (environ {{max}} s utilisées).",
+    "add": "Ajouter des enregistrements",
+    "remove": "Retirer {{name}}",
+    "total": "Total : {{seconds}} s sur {{count}} enregistrements",
+    "skipped": "Ignoré : {{reason}}",
+    "processing": "Nettoyage et fusion des enregistrements…",
+    "error": "Impossible de mettre à jour les enregistrements : {{message}}"
   }
 }
