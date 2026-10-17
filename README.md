@@ -55,6 +55,17 @@ Local workflows run on your hardware. Remote services are optional; usage analyt
 
 </details>
 
+## Mudanças deste fork
+
+Fork de [debpalash/VoiceStudio](https://github.com/debpalash/VoiceStudio), mantido sob a licença AGPL-3.0 e com os avisos de copyright originais. Todo o crédito do projeto é do autor original; este fork só acrescenta:
+
+1. **Clonagem com vários áudios.** Em *Clonagem*, ao salvar uma voz (ou ao editar uma salva), use *Adicionar gravações* para anexar vários áudios da mesma pessoa, ou grave pelo microfone. Cada áudio é normalizado, tem o silêncio cortado e é dividido em trechos de fala; os melhores trechos de cada gravação são combinados em uma única referência (até 15 s, dentro do limite de 20 s do OmniVoice) usada por todos os engines. As gravações originais ficam guardadas e podem ser removidas depois. Vozes antigas de um áudio só continuam iguais.
+2. **Pronúncia.** Com o idioma em *Auto*, o idioma do texto agora é detectado e usado na normalização, no dicionário de pronúncia por idioma e (no OmniVoice) na geração. Para palavras ou trechos em outro idioma use `[lang:en]night[/lang]` no texto. O dicionário de pronúncia continua em Configurações → Pronúncia. Detalhes e causa em [docs/features/pronunciation-and-language.md](docs/features/pronunciation-and-language.md).
+3. **Narração em vídeo.** Nova tela *Narração* (barra lateral): importe um vídeo, escreva o roteiro (ou divida em trechos com tempo), escolha a voz, gere e baixe o vídeo com a nova faixa, mantendo ou silenciando o áudio original. A fala é ajustada à duração dos trechos com o planejador de tempo da dublagem. Não há sincronização labial.
+4. **Interface limpa.** Paleta neutra, tema claro/escuro e uma única cor de destaque configurável em `electron/src/renderer/src/styles/t3-theme.css` (`--accent-hue`, `--accent-chroma`, `--accent-lightness`). Barra lateral fixa e compacta; a área central mostra só a ferramenta aberta.
+
+Veja [NOTAS-DO-FORK.md](NOTAS-DO-FORK.md) para decisões, pendências e como testar.
+
 ## Get started
 
 ### One-command install (macOS / Linux)

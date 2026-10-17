@@ -30,6 +30,7 @@ from fastapi.responses import FileResponse
 
 from api.dependencies import require_admin
 from core.config import OUTPUTS_DIR
+from core.path_security import upload_suffix
 from services import narration as nr
 
 logger = logging.getLogger("omnivoice.narration")
@@ -145,7 +146,7 @@ async def create_job(
     keep_original: bool = Form(False),
     original_volume: float = Form(0.25),
 ):
-    ext = os.path.splitext(video.filename or "")[1].lower()
+    ext = (upload_suffix(video.filename) or "").lower()
     if ext not in _VIDEO_EXTS:
         raise HTTPException(status_code=415, detail="Choose a video file: MP4, MOV, MKV, WebM or AVI.")
     parsed = None

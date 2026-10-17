@@ -26,6 +26,7 @@ from fastapi import APIRouter, File, HTTPException, UploadFile
 
 from api.routers import profiles as _p
 from core import event_bus
+from core.path_security import upload_suffix
 from core.db import db_conn
 
 logger = logging.getLogger("omnivoice.profile_references")
@@ -54,7 +55,7 @@ async def save_sources(profile_id: str, uploads: List[UploadFile]) -> List[dict]
     os.makedirs(_p.VOICES_DIR, exist_ok=True)
     try:
         for upload in uploads:
-            ext = os.path.splitext(upload.filename or "")[1].lower()
+            ext = (upload_suffix(upload.filename) or "").lower()
             if ext not in _p._REF_AUDIO_EXTS:
                 raise HTTPException(
                     status_code=415,

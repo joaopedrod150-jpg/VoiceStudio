@@ -1129,7 +1129,68 @@ def _generate_timeout_s(
     )
 
 
-def _run_inference_single(
+
+def _render_lang_runs(single, bound, sample_rate, finish):
+    """Render ``[lang:xx]..[/lang]`` text run by run, then join the audio.
+
+    ``single`` is the one-language renderer; each run is rendered raw (no
+    mastering) with its own language and the joined audio gets the effect
+    chain once, so levels stay even across the language switches.
+    """
+    import torch
+    from services.chunked_tts import DEFAULT_CROSSFADE_MS, concatenate_audio_chunks
+    from services.lang_spans import split_lang_runs
+
+    runs = split_lang_runs(bound["text"], bound["language"])
+    parts = []
+    for i, (run_text, run_lang) in enumerate(runs):
+        args = dict(bound, text=run_text, language=run_lang, effect_preset="raw")
+        if args.get("used_seed") is not None:
+            args["used_seed"] = args["used_seed"] + i
+        out = single(**args)
+        parts.append(out)
+    sr = sample_rate(bound)
+    joined = concatenate_audio_chunks(parts, sr, DEFAULT_CROSSFADE_MS, texts=[t for t, _ in runs])
+    return finish(joined, sr, bound)
+
+
+def _with_lang_runs(sample_rate, finish):
+    """Decorator: text carrying language tags is split by language before rendering."""
+    import functools
+    import inspect
+
+    def decorate(single):
+        return _lang_runs_wrapper(single, sample_rate, finish)
+
+    return decorate
+
+
+def _lang_runs_wrapper(single, sample_rate, finish):
+    import functools
+    import inspect
+
+    sig = inspect.signature(single)
+
+    @functools.wraps(single)
+    def wrapper(*args, **kwargs):
+        from services.lang_spans import has_lang_tags
+
+        bound_args = sig.bind(*args, **kwargs)
+        bound_args.apply_defaults()
+        bound = dict(bound_args.arguments)
+        if not has_lang_tags(bound.get("text") or ""):
+            return single(*args, **kwargs)
+        return _render_lang_runs(single, bound, sample_rate, finish)
+
+    return wrapper
+
+
+
+@_with_lang_runs(
+    lambda b: b["model"].sampling_rate if hasattr(b["model"], "sampling_rate") else 24000,
+    lambda audio, sr, b: _apply_effect_chain(audio, sr, b["effect_preset"]),
+)
+def _run_inference(
     model, text, language, ref_audio_path, ref_text, instruct, duration,
     num_step, guidance_scale, speed, t_shift, denoise,
     postprocess_output, layer_penalty_factor, position_temperature,
@@ -1212,52 +1273,14 @@ def _run_inference_single(
         _oom_friendly_reraise(e)
 
 
-def _render_lang_runs(single, bound, sample_rate, finish):
-    """Render ``[lang:xx]..[/lang]`` text run by run, then join the audio.
-
-    ``single`` is the one-language renderer; each run is rendered raw (no
-    mastering) with its own language and the joined audio gets the effect
-    chain once, so levels stay even across the language switches.
-    """
-    import torch
-    from services.chunked_tts import DEFAULT_CROSSFADE_MS, concatenate_audio_chunks
-    from services.lang_spans import split_lang_runs
-
-    runs = split_lang_runs(bound["text"], bound["language"])
-    parts = []
-    for i, (run_text, run_lang) in enumerate(runs):
-        args = dict(bound, text=run_text, language=run_lang, effect_preset="raw")
-        if args.get("used_seed") is not None:
-            args["used_seed"] = args["used_seed"] + i
-        out = single(**args)
-        parts.append(out)
-    sr = sample_rate(bound)
-    joined = concatenate_audio_chunks(parts, sr, DEFAULT_CROSSFADE_MS, texts=[t for t, _ in runs])
-    return finish(joined, sr, bound)
-
-
-def _with_lang_runs(single, sample_rate, finish):
-    """Wrap a ``_run_*`` renderer so text carrying language tags is split by language."""
-    import functools
-    import inspect
-
-    sig = inspect.signature(single)
-
-    @functools.wraps(single)
-    def wrapper(*args, **kwargs):
-        from services.lang_spans import has_lang_tags
-
-        bound_args = sig.bind(*args, **kwargs)
-        bound_args.apply_defaults()
-        bound = dict(bound_args.arguments)
-        if not has_lang_tags(bound.get("text") or ""):
-            return single(*args, **kwargs)
-        return _render_lang_runs(single, bound, sample_rate, finish)
-
-    return wrapper
-
-
-def _run_backend_inference_single(
+@_with_lang_runs(
+    lambda b: b["backend"].sample_rate,
+    lambda audio, sr, b: _apply_effect_chain(
+        audio, sr, b["effect_preset"],
+        skip_mastering=getattr(b["backend"], "applies_own_mastering", False),
+    ),
+)
+def _run_backend_inference(
     backend, text, language, ref_audio_path, ref_text, instruct, duration,
     num_step, guidance_scale, speed, denoise, postprocess_output,
     used_seed, effect_preset="broadcast",
@@ -1363,21 +1386,6 @@ def _run_backend_inference_single(
         if rewritten is not e:
             raise rewritten from e
         _oom_friendly_reraise(e)
-
-
-_run_inference = _with_lang_runs(
-    _run_inference_single,
-    lambda b: b["model"].sampling_rate if hasattr(b["model"], "sampling_rate") else 24000,
-    lambda audio, sr, b: _apply_effect_chain(audio, sr, b["effect_preset"]),
-)
-_run_backend_inference = _with_lang_runs(
-    _run_backend_inference_single,
-    lambda b: b["backend"].sample_rate,
-    lambda audio, sr, b: _apply_effect_chain(
-        audio, sr, b["effect_preset"],
-        skip_mastering=getattr(b["backend"], "applies_own_mastering", False),
-    ),
-)
 
 
 # #1257: the language picker offers all 646 languages regardless of engine,
