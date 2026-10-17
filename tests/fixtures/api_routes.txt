@@ -21,6 +21,7 @@ DELETE /models/licenses/receipts/{plan_digest}
 DELETE /models/{repo_id:path}
 DELETE /profiles/{profile_id}
 DELETE /profiles/{profile_id}/consent
+DELETE /profiles/{profile_id}/references/{ref_id}
 DELETE /projects/{project_id}
 DELETE /pronunciation/{entry_id}
 GET /.well-known/voicestudio-speech
@@ -142,6 +143,7 @@ GET /profiles
 GET /profiles/{profile_id}
 GET /profiles/{profile_id}/audio
 GET /profiles/{profile_id}/image
+GET /profiles/{profile_id}/references
 GET /profiles/{profile_id}/usage
 GET /projects
 GET /projects/{project_id}
@@ -273,6 +275,7 @@ POST /preview/upload
 POST /profiles
 POST /profiles/{profile_id}/consent
 POST /profiles/{profile_id}/lock
+POST /profiles/{profile_id}/references
 POST /profiles/{profile_id}/unlock
 POST /projects
 POST /pronunciation

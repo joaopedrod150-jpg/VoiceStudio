@@ -59,6 +59,18 @@ _BASE_SCHEMA = """
         vd_states TEXT DEFAULT NULL,
         created_at REAL
     );
+    CREATE TABLE IF NOT EXISTS voice_profile_refs (
+        id TEXT PRIMARY KEY,
+        profile_id TEXT NOT NULL,
+        filename TEXT NOT NULL,
+        original_name TEXT DEFAULT '',
+        duration REAL DEFAULT 0,
+        status TEXT DEFAULT 'ok',
+        reason TEXT DEFAULT '',
+        position INTEGER DEFAULT 0,
+        created_at REAL
+    );
+    CREATE INDEX IF NOT EXISTS idx_voice_profile_refs_profile ON voice_profile_refs(profile_id);
     CREATE TABLE IF NOT EXISTS generation_history (
         id TEXT PRIMARY KEY,
         text TEXT,

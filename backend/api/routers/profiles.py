@@ -8,7 +8,7 @@ import weakref
 import time
 import shutil
 import threading
-from typing import Optional
+from typing import List, Optional
 from fastapi import APIRouter, File, Form, UploadFile, HTTPException
 from fastapi.responses import FileResponse, Response
 from pydantic import BaseModel
@@ -121,6 +121,7 @@ _DESIGN_SEED = 42  # deterministic sample render, same as archetype previews
 async def create_profile(
     name: str = Form(...),
     ref_audio: Optional[UploadFile] = File(None),
+    extra_ref_audios: List[UploadFile] = File(default_factory=list),
     ref_text: str = Form(""),
     instruct: str = Form(""),
     language: str = Form("Auto"),
@@ -133,6 +134,9 @@ async def create_profile(
     """Create a voice profile (spec: docs/specs/voice-studio-unification.md §5).
 
     kind='clone'  — requires `ref_audio` (the user's reference recording).
+                    Optional `extra_ref_audios` are more recordings of the same
+                    person; all are cleaned and merged into one reference
+                    (services/voice_reference.py) and kept as sources.
     kind='design' — requires `vd_states` (JSON of category picks); the server
                     renders a deterministic sample WAV (seed 42, same path as
                     archetype materialization) and stores it as the profile's
@@ -192,16 +196,37 @@ async def create_profile(
         portrait = normalize_portrait(await image.read(MAX_IMAGE_BYTES + 1))
     portrait_path = os.path.join(VOICES_DIR, f"{profile_id}.portrait.jpg")
 
+    source_rows: List[dict] = []
     if kind == "clone":
         ext = media_upload_suffix(ref_audio.filename)
         if ext is None:
             raise HTTPException(status_code=415, detail="Choose an audio or video file.")
-        audio_filename = f"{profile_id}{ext}"
-        audio_path = os.path.join(VOICES_DIR, audio_filename)
         # Storage can be removed after startup; recover before persisting uploads.
         os.makedirs(VOICES_DIR, exist_ok=True)
-        with open(audio_path, "wb") as f:
-            f.write(await ref_audio.read())
+        if extra_ref_audios:
+            from api.routers import profile_references as _refs
+            if 1 + len(extra_ref_audios) > _refs.MAX_SOURCES:
+                raise HTTPException(
+                    status_code=422,
+                    detail=f"A voice can have at most {_refs.MAX_SOURCES} recordings.",
+                )
+            source_rows = await _refs.save_sources(profile_id, [ref_audio, *extra_ref_audios])
+            audio_filename = f"{profile_id}.wav"
+            audio_path = os.path.join(VOICES_DIR, audio_filename)
+            try:
+                await _refs.merge_sources(source_rows, audio_path)
+            except BaseException:
+                for r in source_rows:
+                    with contextlib.suppress(OSError):
+                        os.remove(os.path.join(VOICES_DIR, r["filename"]))
+                raise
+            # A typed transcript described only one of the recordings.
+            ref_text = ""
+        else:
+            audio_filename = f"{profile_id}{ext}"
+            audio_path = os.path.join(VOICES_DIR, audio_filename)
+            with open(audio_path, "wb") as f:
+                f.write(await ref_audio.read())
         # A clone needs speech to copy: refuse a reference with no audio
         # stream (a silent screen recording, a video-only WebM) at save time
         # instead of failing every later generation with it.
@@ -209,8 +234,9 @@ async def create_profile(
         try:
             await asyncio.to_thread(require_audio_stream, audio_path)
         except BaseException:
-            with contextlib.suppress(OSError):
-                os.remove(audio_path)
+            for leftover in [audio_path, *(os.path.join(VOICES_DIR, r["filename"]) for r in source_rows)]:
+                with contextlib.suppress(OSError):
+                    os.remove(leftover)
             raise
         # Resolve the transcript at save time (see _auto_transcribe_reference).
         if not ref_text.strip():
@@ -261,12 +287,18 @@ async def create_profile(
                 (profile_id, name, audio_filename, ref_text, instruct, language,
                  used_seed, personality, kind, vd_states, time.time())
             )
+            if source_rows:
+                from api.routers.profile_references import _insert_rows
+                _insert_rows(conn, profile_id, source_rows, 0)
     except Exception:
         if os.path.exists(portrait_path):
             os.remove(portrait_path)
         # Clean up orphaned audio file if DB insert fails
         if os.path.exists(audio_path):
             os.remove(audio_path)
+        for r in source_rows:
+            with contextlib.suppress(OSError):
+                os.remove(os.path.join(VOICES_DIR, r["filename"]))
         raise
     event_bus.emit("profiles", {"action": "created", "id": profile_id})
     return get_profile(profile_id)
@@ -1145,6 +1177,11 @@ def delete_profile(profile_id: str):
         # Commit the database change before removing assets: a failed write or
         # commit must leave the rolled-back profile's files usable.
         conn.execute("UPDATE generation_history SET profile_id = NULL WHERE profile_id=?", (profile_id,))
+        from api.routers.profile_references import cleanup_sources
+        for name in cleanup_sources(profile_id, conn):
+            source = _voices_path(name)
+            if source:
+                paths.append(source)
         conn.execute("DELETE FROM voice_profiles WHERE id=?", (profile_id,))
     failed_assets = []
     for path in dict.fromkeys(paths):
