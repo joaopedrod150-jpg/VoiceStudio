@@ -736,6 +736,7 @@ def _phase_a_build_inner() -> None:
         audiobook,
         longform_jobs,
         pronunciation,  # Expressive-TTS Spec 01: user pronunciation dictionary
+        narration,  # video + script -> narrated video
         settings as settings_router,  # Phase 1 AUTH-03: HF token save/clear/state
         media_tools as media_tools_router,  # Audio tools: ffmpeg/ffprobe/yt-dlp
         auth as auth_router,
@@ -750,7 +751,7 @@ def _phase_a_build_inner() -> None:
         stories, setup, gallery, archetypes, describe_voice, community,
         batch, watermark, events, capture, capture_ws, speech_platform, dictation,
         openai_compat, tts_stream, marketplace, personas, sonitranslate,
-        audiobook, longform_jobs, pronunciation, settings_router,
+        audiobook, longform_jobs, pronunciation, narration, settings_router,
         media_tools_router, auth_router, _mcp_bindings_router,
         _telephony_twilio_router, _calls_router,
     ])

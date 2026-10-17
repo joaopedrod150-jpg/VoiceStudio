@@ -19,6 +19,7 @@ DELETE /longform/jobs/{job_id}
 DELETE /marketplace/{filename}
 DELETE /models/licenses/receipts/{plan_digest}
 DELETE /models/{repo_id:path}
+DELETE /narration/jobs/{job_id}
 DELETE /profiles/{profile_id}
 DELETE /profiles/{profile_id}/consent
 DELETE /profiles/{profile_id}/references/{ref_id}
@@ -135,6 +136,8 @@ GET /models/install/status
 GET /models/licenses/acceptance/{repo_id:path}
 GET /models/licenses/details/{repo_id:path}
 GET /models/licenses/receipts/{plan_digest}
+GET /narration/jobs/{job_id}
+GET /narration/jobs/{job_id}/video
 GET /openapi.json
 GET /personalities
 GET /preview/{filename}
@@ -268,6 +271,7 @@ POST /models/install/prepare
 POST /models/licenses/accept
 POST /models/licenses/revoke
 POST /models/licenses/verify/{plan_digest}
+POST /narration/jobs
 POST /personas/export/{profile_id}
 POST /personas/import
 POST /personas/inspect
